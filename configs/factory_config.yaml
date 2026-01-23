@@ -1,0 +1,15 @@
+camera:
+  source: 0  # 0 for Webcam, or RTSP URL
+  width: 1280
+  height: 720
+  fps: 30
+
+zones:
+  - name: "Hazard Area"
+    max_count: 2
+    polygon: [[100, 100], [500, 100], [500, 500], [100, 500]]
+
+ppe:
+  mandatory_classes:
+    - 1 # Helmet (Example ID)
+    - 2 # Vest (Example ID)

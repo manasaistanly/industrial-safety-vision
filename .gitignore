@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Dataset and Large Files
+data/
+*.zip
+*.zip.*
+runs/
+
+# YOLO models
+*.pt
+!yolov8n.pt  # Keep original nano model if desired, but usually we ignore models too. Storing nano is fine (6MB).
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
