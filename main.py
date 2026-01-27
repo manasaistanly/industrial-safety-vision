@@ -23,13 +23,15 @@ def main():
     
     # Initialize Core
     source = config['camera']['source']
+    fps = config['camera'].get('fps', 30)
     video = VideoSource(source=source)
     detector = SafeDetector() # Defaults to yolov8n
     tracker = SafetyTracker()
     
     # Initialize Logic
-    ppe_engine = PPEComplianceEngine()
-    behavior_monitor = BehaviorMonitor()
+    ppe_config = config.get('ppe', {}).get('mandatory_classes', None)
+    ppe_engine = PPEComplianceEngine(mandatory_ppe=ppe_config)
+    behavior_monitor = BehaviorMonitor(fps=fps)
     zone_monitor = ZoneMonitor(zones_config=config.get('zones'))
     alert_manager = AlertManager()
     

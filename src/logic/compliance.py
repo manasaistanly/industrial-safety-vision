@@ -3,11 +3,14 @@ from loguru import logger
 
 class PPEComplianceEngine:
     def __init__(self, mandatory_ppe=None):
+        """
+        Initialize PPE Compliance Engine.
+        mandatory_ppe: list of int, class IDs of required PPE. Defaults to [1, 2] if None.
+        """
         if mandatory_ppe is None:
             # Default mapping: ID -> Name. Ideally passed from Config.
             # Assuming YOLO Class IDs: 0=Person, 1=Helmet, 2=Vest, etc.
-            # This logic depends highly on the trained model's class map.
-            self.mandatory_ppe = []
+            self.mandatory_ppe = [1, 2] # Default to Helmet and Vest
         else:
             self.mandatory_ppe = mandatory_ppe
 
