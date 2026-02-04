@@ -3,14 +3,16 @@ from collections import deque
 import supervision as sv
 
 class BehaviorMonitor:
-    def __init__(self, fps=30):
+    def __init__(self, fps=30, person_class_id=11):
         """
         Initialize Behavior Monitor.
         fps: int, frames per second of the video source. Used for speed calculation.
+        person_class_id: int, class ID for Person. Defaults to 11.
         """
         # Maps tracker_id -> deque of (x, y, timestamp)
         self.history = {} 
         self.fps = fps
+        self.person_class_id = person_class_id
         self.max_history = fps * 2 # Keep 2 seconds of history
         
         # Logic thresholds
@@ -24,8 +26,8 @@ class BehaviorMonitor:
         """
         alerts = {}
         
-        # Only track People (class_id 0)
-        people = detections[detections.class_id == 0]
+        # Only track People (class_id 11 by default)
+        people = detections[detections.class_id == self.person_class_id]
         
         import time
         timestamp = time.time()

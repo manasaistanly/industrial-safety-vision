@@ -1,6 +1,7 @@
 import cv2
 import yaml
 import time
+import os
 import supervision as sv
 from loguru import logger
 import numpy as np
@@ -24,15 +25,24 @@ def main():
     # Initialize Core
     source = config['camera']['source']
     fps = config['camera'].get('fps', 30)
+    person_id = config['camera'].get('person_class_id', 11)
+    
     video = VideoSource(source=source)
-    detector = SafeDetector() # Defaults to yolov8n
+    
+    # Check for custom model
+    custom_model_path = "runs/train/ppe_model/weights/best.pt"
+    model_path = custom_model_path if os.path.exists(custom_model_path) else "yolov8n.pt"
+    logger.info(f"Loading model from: {model_path}")
+    
+    detector = SafeDetector(model_path=model_path) # Defaults to yolov8n
+    logger.info(f"Model Classes: {detector.model.names}")
     tracker = SafetyTracker()
     
     # Initialize Logic
     ppe_config = config.get('ppe', {}).get('mandatory_classes', None)
-    ppe_engine = PPEComplianceEngine(mandatory_ppe=ppe_config)
-    behavior_monitor = BehaviorMonitor(fps=fps)
-    zone_monitor = ZoneMonitor(zones_config=config.get('zones'))
+    ppe_engine = PPEComplianceEngine(mandatory_ppe=ppe_config, person_class_id=person_id)
+    behavior_monitor = BehaviorMonitor(fps=fps, person_class_id=person_id)
+    zone_monitor = ZoneMonitor(zones_config=config.get('zones'), person_class_id=person_id)
     alert_manager = AlertManager()
     
     # Annotators

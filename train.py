@@ -4,7 +4,7 @@ import yaml
 
 def train_model():
     # 1. Setup paths
-    dataset_yaml = os.path.abspath("data/archive/data.yaml")
+    dataset_yaml = os.path.abspath("data/lite/data.yaml")
     
     # Ensure the yaml exists
     if not os.path.exists(dataset_yaml):
@@ -32,7 +32,7 @@ def train_model():
     try:
         results = model.train(
             data=dataset_yaml,
-            epochs=20,          # Start with 20 epochs for quick results
+            epochs=3,          # Reduced for quick demonstration
             imgsz=640,
             batch=16,
             project='runs/train',

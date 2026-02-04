@@ -2,15 +2,17 @@ from ..utils.geometry import box_contains_box
 from loguru import logger
 
 class PPEComplianceEngine:
-    def __init__(self, mandatory_ppe=None):
+    def __init__(self, mandatory_ppe=None, person_class_id=11):
         """
         Initialize PPE Compliance Engine.
-        mandatory_ppe: list of int, class IDs of required PPE. Defaults to [1, 2] if None.
+        mandatory_ppe: list of int, class IDs of required PPE. Defaults to [3, 13] if None.
+        person_class_id: int, class ID for Person. Defaults to 11.
         """
+        self.person_class_id = person_class_id
         if mandatory_ppe is None:
             # Default mapping: ID -> Name. Ideally passed from Config.
-            # Assuming YOLO Class IDs: 0=Person, 1=Helmet, 2=Vest, etc.
-            self.mandatory_ppe = [1, 2] # Default to Helmet and Vest
+            # Dataset: 11=Person, 3=Hardhat, 13=Vest
+            self.mandatory_ppe = [3, 13]
         else:
             self.mandatory_ppe = mandatory_ppe
 
@@ -22,8 +24,8 @@ class PPEComplianceEngine:
         Returns: 
             list of dicts: [{person_id, missing_ppe: [], status: 'SAFE'/'UNSAFE'}]
         """
-        people = detections[detections.class_id == 0] # Assuming class 0 is Person
-        ppe_items = detections[detections.class_id != 0] # Everything else is PPE? 
+        people = detections[detections.class_id == self.person_class_id]
+        ppe_items = detections[detections.class_id != self.person_class_id] # Everything else is PPE? 
                                                          # Warning: Make sure model doesn't detect other stuff.
         
         results = []
@@ -62,8 +64,8 @@ class PPEComplianceEngine:
                 if req_id not in detected_ppe_classes:
                     # Map ID to name if possible
                     name = "PPE_Item"
-                    if req_id == 1: name = "Helmet"
-                    elif req_id == 2: name = "Vest"
+                    if req_id == 3: name = "Hardhat"
+                    elif req_id == 13: name = "Safety Vest"
                     
                     person_result['missing'].append(name)
                     person_result['status'] = "UNSAFE"

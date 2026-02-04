@@ -1,6 +1,0 @@
-# PPE Safety Gating System - Requirements
-
-opencv-python==4.8.1.78
-ultralytics==8.0.230
-numpy==1.24.3
-pymodbus==3.5.0

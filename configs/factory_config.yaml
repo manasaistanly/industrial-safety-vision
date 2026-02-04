@@ -3,6 +3,8 @@ camera:
   width: 1280
   height: 720
   fps: 30
+  person_class_id: 11 # Dataset specific ID
+
 
 zones:
   - name: "Hazard Area"
@@ -11,5 +13,5 @@ zones:
 
 ppe:
   mandatory_classes:
-    - 1 # Helmet (Example ID)
-    - 2 # Vest (Example ID)
+    - 3 # Hardhat
+    - 13 # Safety Vest
